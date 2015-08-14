@@ -51,6 +51,17 @@
       display: none;
     }
 
+    #map {
+      height: 100%;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid black;
+    }
+
+    img {
+      width: 100%;
+    }
+
     p {
       padding: 15px 0;
     }
@@ -80,6 +91,7 @@
         <div id="success" class="alert alert-success">Success!</div>
         <div id="inputFail" class="alert alert-danger">Could not find postcode for that address. Please try again.</div>
         <div id="serverFail" class="alert alert-danger">Could not connect to server. Please try again.</div>
+        <div id="map" class="alert alert-image"></div>
       </div>
     </div>
   </div>
@@ -115,21 +127,37 @@
       }
 
       function processXML(xml) {
+        var lat, lng;
+
         $(xml).find("address_component").each(function() {
           if ($(this).find("type").text() == "postal_code") {
             $("#success").html("The postcode you need is " + $(this).find('long_name').text()).fadeIn();
 
             result = 1;
+
+            lat = $(xml).find('lat').first().text();
+            lng = $(xml).find('lng').first().text();
+
           }
         });
+
+        if (result == 1) {
+
+          var $image = $('<img/>').attr('src', "https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C"+lat+","+lng)
+  
+          $('#map').html($image).fadeIn(2000);
+        }
+
         if (result == 0) {
           $("#inputFail").fadeIn();
         }
       }
-      
+  
     });
 
   </script>
+
+
 
 </body>
 </html>
