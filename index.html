@@ -96,68 +96,12 @@
     </div>
   </div>
 
+  
   <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-  <script type="text/javascript">
-    $(window).load(function() {
-      $(".alert").hide();  
-    });
-
-    $("#findMyPostcode").click(function(event) {
-      
-      event.preventDefault();
-      var result = 0,
-          addressInput = $("#address").val();
-
-      $(".alert").hide();
-
-      $.ajax({
-        type: "GET",
-        url: "https://maps.googleapis.com/maps/api/geocode/xml?address=" + encodeURIComponent(addressInput) + "&key=AIzaSyCT_fvEBXI1WTxmkRPEg2KkvuIS_FVPpiw",
-        dataType: "xml",
-        success: processXML,
-        error: error
-      });
-
-      function error() {
-        $("#serverFail").fadeIn();
-      }
-
-      function processXML(xml) {
-        var lat, lng;
-
-        $(xml).find("address_component").each(function() {
-          if ($(this).find("type").text() == "postal_code") {
-            $("#success").html("The postcode you need is " + $(this).find('long_name').text()).fadeIn();
-
-            result = 1;
-
-            lat = $(xml).find('lat').first().text();
-            lng = $(xml).find('lng').first().text();
-
-          }
-        });
-
-        if (result == 1) {
-
-          var $image = $('<img/>').attr('src', "https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C"+lat+","+lng)
+  <script type="text/javascript" src="custom.js"></script>
   
-          $('#map').html($image).fadeIn(2000);
-        }
-
-        if (result == 0) {
-          $("#inputFail").fadeIn();
-        }
-      }
-  
-    });
-
-  </script>
-
-
-
-</body>
+  </body>
 </html>
